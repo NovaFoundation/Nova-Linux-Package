@@ -51,6 +51,69 @@ int addr2line(char const * const program_name, void const * const addr)
   return system(addr2line_cmd);
 }
 
+char upstack(CONTEXT* context, STACKFRAME* frame)
+{
+  return StackWalk(IMAGE_FILE_MACHINE_I386 ,
+                   GetCurrentProcess(),
+                   GetCurrentThread(),
+                   frame,
+                   context,
+                   0,
+                   SymFunctionTableAccess,
+                   SymGetModuleBase,
+                   0 );
+}
+
+#ifdef __GNUC__
+
+void* getEIP()
+{
+    return __builtin_return_address(0);
+}
+
+void nova_print_calling_stacktrace(int count)
+{
+  const uintptr_t register esp asm("esp");
+  const uintptr_t register ebp asm("ebp");
+  
+  CONTEXT* context = (CONTEXT*)NOVA_MALLOC(sizeof(CONTEXT));
+  context->Eip = (const uintptr_t)getEIP();
+  context->Esp = esp;
+  context->Ebp = ebp;
+  
+  SymInitialize(GetCurrentProcess(), 0, 1);
+ 
+  STACKFRAME frame = { 0 };
+ 
+  /* setup initial stack frame */
+  frame.AddrPC.Offset         = context->Eip;
+  frame.AddrPC.Mode           = AddrModeFlat;
+  frame.AddrStack.Offset      = context->Esp;
+  frame.AddrStack.Mode        = AddrModeFlat;
+  frame.AddrFrame.Offset      = context->Ebp;
+  frame.AddrFrame.Mode        = AddrModeFlat;
+ 
+  for (; count > 0; count--) {
+    upstack(context, &frame);
+  }
+  
+  while (upstack(context, &frame))
+  {
+    addr2line(NOVA_PROGRAM_NAME, (void*)frame.AddrPC.Offset);
+  }
+ 
+  SymCleanup( GetCurrentProcess() );
+}
+
+#else
+
+void nova_print_calling_stacktrace(int count)
+{
+  printf("print calling stacktrace unsupported on current OS\n");
+}
+
+#endif
+
 void nova_print_stacktrace(CONTEXT* context)
 {
   SymInitialize(GetCurrentProcess(), 0, 1);
@@ -175,4 +238,9 @@ void nova_signal_handler(int code) {
         exit(1);
 }
 
+#else
+void nova_print_calling_stacktrace(int count)
+{
+  printf("print calling stacktrace unsupported on current OS\n");
+}
 #endif

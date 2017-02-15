@@ -33,6 +33,8 @@
 #	else
 #		define new_thread_method pthread_create
 #	endif
+#	include <fcntl.h>
+#	include <semaphore.h>
 #endif
 
 #include <time.h>
@@ -61,5 +63,14 @@ struct DataStruct
 
 NOVA_THREAD_FUNC lib_nova_thread_run(NOVA_THREAD_FUNC_ARG arg);
 NOVA_THREAD_HANDLE* create_thread(nova_thread_Nova_Thread* this, run_method method, void* ref, void* context);
+
+int nova_create_semaphore();
+int nova_close_semaphore();
+
+#ifdef _WIN32
+    extern HANDLE nova_thread_semaphore;
+#elif defined(__APPLE__) || defined(__linux__)
+    extern sem_t* nova_thread_semaphore;
+#endif
 
 #endif

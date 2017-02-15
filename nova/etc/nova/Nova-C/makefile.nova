@@ -48,7 +48,7 @@ ifeq ($(CC), gcc)
 endif
 
 ifndef NO_GC
-	CFLAGS += -DUSE_GC -DPARALLEL_MARK
+	CFLAGS += -DUSE_GC -DPARALLEL_MARK# -DGC_PTHREADS -DGC_PTHREADS_PARAMARK
 	LIBS += -lgc
 endif
 ifeq ($(OS), Windows_NT)
@@ -113,11 +113,11 @@ INCLUDE_DIRS = $(patsubst %,%,$(call rwildcard,$(subst \,/,$(home))/include/))
 
 %.gch: %.h
 	$(ECHO) "Compiling '$<'"
-	$(V)$(CC) $(CFLAGS) $(IDIR) -c -o $@ $<
+	$(V)$(CC) $(CFLAGS) $(IDIR) -c -o "$@" "$<"
 
 %.o: %.c %.d
 	$(ECHO) "Compiling '$<'"
-	$(V)$(CC) -MMD $(CFLAGS) $(IDIR) -c -o $@ $<
+	$(V)$(CC) -MMD $(CFLAGS) $(IDIR) -c -o "$@" "$<"
 
 %.d:;
 

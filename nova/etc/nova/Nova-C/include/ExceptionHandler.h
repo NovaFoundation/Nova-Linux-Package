@@ -9,7 +9,6 @@
 #define jump longjmp
 
 #define TRY \
-	do\
 	{\
 		buffer buf;\
 		int exception_code;\
@@ -44,8 +43,7 @@
 				NOVA_FREE(oldData);\
 			}\
 		}\
-	}\
-	while(0)
+	}
 
 #define THROW(exception, soft) novaEnv.nova_exception_ExceptionData.throwException(exceptionData, exceptionData, &exceptionData, (nova_exception_Nova_Exception*)exception, soft)
 

@@ -2,6 +2,7 @@
 #define NOVA_EXCEPTION_HANDLING
 
 #include <stdio.h>
+#include <Nova.h>
 
 #ifdef _WIN32
 
@@ -12,6 +13,7 @@
 void setProgramName(char* name);
 int addr2line(char const * const program_name, void const * const addr);
 void nova_print_stacktrace(CONTEXT* context);
+void nova_print_calling_stacktrace(int count);
 LONG WINAPI nova_exception_handler(EXCEPTION_POINTERS * ExceptionInfo);
 void nova_signal_handler(int code);
 
