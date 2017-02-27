@@ -65,7 +65,7 @@ NOVA_THREAD_FUNC lib_nova_thread_run(NOVA_THREAD_FUNC_ARG arg)
 {
 	DataStruct* data = (DataStruct*)arg;
 	
-	data->run_method(data->instance, 0, data->context);
+	data->run_method(data->instance, data->context);
 	
 	// NOVA_FREE(data);
 
@@ -118,4 +118,23 @@ int nova_close_semaphore() {
 #endif
 	
 	return 0;
+}
+
+long_long nova_current_thread_id() {
+#ifdef _WIN32
+	return GetCurrentThreadId();
+#elif defined(__APPLE__)
+	uint64_t id;
+	
+	pthread_threadid_np(NULL, &id);
+	
+	return id;
+#else
+	pthread_t ptid = pthread_self();
+	uint64_t id = 0;
+	
+	memcpy(&id, &ptid, sizeof(id) < sizeof(ptid) ? sizeof(id) : sizeof(ptid));
+
+	return id;
+#endif
 }

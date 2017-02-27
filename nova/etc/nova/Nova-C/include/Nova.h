@@ -28,9 +28,8 @@
 #ifdef USE_GC
 //#	define PARALLEL_MARK
 #	define THREAD_LOCAL_ALLOC
-#	ifdef _WIN32
-#		define GC_THREADS
-#	else
+#	define GC_THREADS
+#	ifndef _WIN32
 #		define GC_PTHREADS
 #	endif
 #	include <gc.h>

@@ -14,7 +14,7 @@
 
 #include <NovaNativeInterface.h>
 
-typedef void (*error_func)(void*, nova_exception_Nova_ExceptionData*, int, nova_Nova_String*, char, void*);
+typedef void (*error_func)(void*, int, nova_Nova_String*, char, void*);
 
 FILE* getPipe(char command[], error_func func, void* ref, void* context);
 

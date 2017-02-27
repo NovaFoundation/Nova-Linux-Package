@@ -1,5 +1,8 @@
 #include "Nova.h"
 
+nova_primitive_Nova_Null* nova_null;
+void* nova_garbageData;
+
 /**
  * Similar to fgets(), but handles automatic reallocation of the buffer.
  * Only parameter is the input stream.

@@ -4,6 +4,7 @@
 #include <config.h>
 #endif
 
+#include <Nova.h>
 #include <sys/types.h>
 #include <stdio.h>
 #include <assert.h>
@@ -90,7 +91,7 @@ int nova_getstr(char** lineptr, size_t* n, FILE* stream, char terminator, int of
                 *n += MIN_CHUNK;
 
             nchars_avail = *n + *lineptr - read_pos;
-            *lineptr = realloc(*lineptr, *n);
+            *lineptr = NOVA_REALLOC(*lineptr, *n);
             
             if (!*lineptr) {
                 errno = ENOMEM;

@@ -78,15 +78,18 @@ endif
 EXTRADEPS = VTableDeclarations.h\
 			NovaNativeInterface.h\
 			InterfaceVTable.h\
-			MainFunction.h\
 			$(home)/include/Nova.h\
 			$(home)/include/NovaExceptionHandling.h
 
 EXTRAOBJ = VTableDeclarations.o\
 			NovaNativeInterface.o\
-			MainFunction.o\
 			$(home)/include/Nova.o\
 			$(home)/include/NovaExceptionHandling.o
+			
+ifndef LIBRARY
+	EXTRADEPS += MainFunction.h
+	EXTRAOBJ += MainFunction.o
+endif
 
 DEPS = $(patsubst %,%,$(NOVA_DEPS) $(EXTRADEPS))
 
@@ -124,8 +127,13 @@ INCLUDE_DIRS = $(patsubst %,%,$(call rwildcard,$(subst \,/,$(home))/include/))
 .PHONY: install link headers clean
 
 install: $(COMPILE_ITEMS)
+ifdef LIBRARY
+	$(ECHO) "Building shared library"
+	$(V)$(CC) -shared $(CFLAGS) $(IDIR) $(COMPILE_ITEMS) -o $(EXEC_PATH).dll $(LDIRS) $(LIBS)
+else
 	$(ECHO) "Linking program"
 	$(V)$(CC) $(CFLAGS) $(IDIR) $(COMPILE_ITEMS) -o $(EXEC_PATH) $(LDIRS) $(LIBS)
+endif
 
 link:
 	$(ECHO) "Linking program"

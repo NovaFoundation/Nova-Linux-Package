@@ -52,7 +52,7 @@ void thread_nanosleep(long_long nanos);
 
 typedef struct DataStruct DataStruct;
 
-typedef void (*run_method)(void*, nova_exception_Nova_ExceptionData*, void*);
+typedef void (*run_method)(void*, void*);
 
 struct DataStruct
 {
@@ -66,6 +66,8 @@ NOVA_THREAD_HANDLE* create_thread(nova_thread_Nova_Thread* this, run_method meth
 
 int nova_create_semaphore();
 int nova_close_semaphore();
+
+long_long nova_current_thread_id();
 
 #ifdef _WIN32
     extern HANDLE nova_thread_semaphore;

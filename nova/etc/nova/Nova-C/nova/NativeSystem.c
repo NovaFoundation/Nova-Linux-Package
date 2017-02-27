@@ -2,9 +2,9 @@
 
 void error(int code, char message[], error_func func, void* ref, void* context)
 {
-	nova_Nova_String* s = novaEnv.nova_String.String__Array1d_nova_primitive_number_Char(0, 0, message);
+	nova_Nova_String* s = novaEnv.nova_String.String__Array1d_nova_primitive_number_Char(0, message);
 
-	func(ref, 0, code, s, 1, context);
+	func(ref, code, s, 1, context);
 }
 
 #ifdef _WIN32

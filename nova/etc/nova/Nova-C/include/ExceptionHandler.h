@@ -13,7 +13,7 @@
 		buffer buf;\
 		int exception_code;\
 		\
-		nova_exception_Nova_ExceptionData* newData = novaEnv.nova_exception_ExceptionData.ExceptionData(0, exceptionData, &buf);\
+		nova_exception_Nova_ExceptionData* newData = novaEnv.nova_exception_ExceptionData.ExceptionData(0, &buf);\
 		\
 		if (exceptionData != 0)\
 		{\
@@ -26,7 +26,7 @@
 		if (exception_code == 0)
 
 #define CATCH(x)\
-	else if (nova_meta_Nova_Class_Nova_isOfType(exceptionData->nova_exception_Nova_ExceptionData_Nova_thrownException->vtable->classInstance, 0, x))
+	else if (nova_meta_Nova_Class_Nova_isOfType(exceptionData->nova_exception_Nova_ExceptionData_Nova_thrownException->vtable->classInstance, x))
 
 #define FINALLY
 
@@ -45,6 +45,6 @@
 		}\
 	}
 
-#define THROW(exception, soft) novaEnv.nova_exception_ExceptionData.throwException(exceptionData, exceptionData, &exceptionData, (nova_exception_Nova_Exception*)exception, soft)
+#define THROW(exception, soft) novaEnv.nova_exception_ExceptionData.throwException(exceptionData, &exceptionData, (nova_exception_Nova_Exception*)exception, soft)
 
 #endif
