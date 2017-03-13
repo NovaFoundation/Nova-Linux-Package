@@ -1,0 +1,2 @@
+chmod -R 777 /etc/nova
+chmod -R 777 /usr/bin/novac
