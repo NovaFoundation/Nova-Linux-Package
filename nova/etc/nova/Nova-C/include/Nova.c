@@ -130,3 +130,30 @@ void nova_free_array(void** array, int* dimensionSizes, int dimension, int dimen
 		}
 	}
 }
+
+nova_funcStruct* nova_get_funcStruct1(void* func) {
+    nova_funcStruct* value = NOVA_MALLOC(sizeof(nova_funcStruct));
+    value->func = func;
+    value->ref = nova_null;
+    value->context = nova_null;
+    
+    return value;
+}
+
+nova_funcStruct* nova_get_funcStruct2(void* func, void* ref) {
+    nova_funcStruct* value = NOVA_MALLOC(sizeof(nova_funcStruct));
+    value->func = func;
+    value->ref = ref;
+    value->context = nova_null;
+    
+    return value;
+}
+
+nova_funcStruct* nova_get_funcStruct3(void* func, void* ref, void* context) {
+    nova_funcStruct* value = NOVA_MALLOC(sizeof(nova_funcStruct));
+    value->func = func;
+    value->ref = ref;
+    value->context = context;
+    
+    return value;
+}

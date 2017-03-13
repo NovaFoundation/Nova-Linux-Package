@@ -1,6 +1,22 @@
 #ifndef NOVA_NOVA
 #define NOVA_NOVA
 
+typedef struct nova_funcStruct {
+    void* func;
+    void* ref;
+    void* context;
+} nova_funcStruct;
+
+#ifdef _WIN32
+#   ifndef _WIN32_WINNT
+#       define _WIN32_WINNT 0x0600
+#   endif
+#   define _WIN32_IE 0x0900
+
+#   include <windows.h>
+#   include <commctrl.h>
+#endif
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,5 +101,9 @@ void copy_string(char* target, char* source);
 
 void** nova_gen_array(void** array, int* dimensionSizes, int dimension, int dimensions, int size);
 void nova_free_array(void** array, int* dimensionSizes, int dimension, int dimensions, del_function function, nova_exception_Nova_ExceptionData* exceptionData);
+
+nova_funcStruct* nova_get_funcStruct1(void* func);
+nova_funcStruct* nova_get_funcStruct2(void* func, void* ref);
+nova_funcStruct* nova_get_funcStruct3(void* func, void* ref, void* context);
 
 #endif

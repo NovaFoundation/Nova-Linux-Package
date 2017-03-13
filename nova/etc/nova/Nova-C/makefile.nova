@@ -53,7 +53,7 @@ ifndef NO_GC
 endif
 ifeq ($(OS), Windows_NT)
 	CFLAGS += -mwindows -mconsole -Wl,--enable-stdcall-fixup
-	LIBS += -lws2_32 -lmysql -lpcre2-8-0 -limagehlp
+	LIBS += -lws2_32 -lmysql -lpcre2-8-0 -limagehlp -lcomctl32
 else
 	LIBS += -lpcre2-8
 	
@@ -102,9 +102,9 @@ OBJ = $(subst :,$(colon),$(EXTRAOBJ)) $(NOVA_OBJ)
 GENERATED_FILES = $(QOOBJ) $(QOGCH)
 
 ifdef COMPILE_C_FILES
-	COMPILE_ITEMS = $(ALLOBJ:.o=.c)
+	COMPILE_ITEMS = $(ALLOBJ:.o=.c)# resources.o
 else
-	COMPILE_ITEMS = $(ALLOBJ)
+	COMPILE_ITEMS = $(ALLOBJ)# resources.o
 endif
 
 #rwildcard=$(foreach d,$(wildcard $1*/),$(call rwildcard,$d*/) echo $d)
@@ -113,6 +113,12 @@ rwildcard=$(sort $(dir $(foreach d,$(wildcard $1*/),$(sort $(dir $(call rwildcar
 ALL_DIRS = $(patsubst %,%,$(call rwildcard,./))
 HOME_DIRS = $(patsubst %,%,$(call rwildcard,$(subst \,/,$(home))/nova/))
 INCLUDE_DIRS = $(patsubst %,%,$(call rwildcard,$(subst \,/,$(home))/include/))
+
+resources.o: *.exe.manifest
+ifeq ($(OS), Windows_NT)
+	$(ECHO) "Building resources"
+	$(V)windres resources.rc -o resources.o
+endif
 
 %.gch: %.h
 	$(ECHO) "Compiling '$<'"
